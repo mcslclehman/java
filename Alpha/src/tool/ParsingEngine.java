@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import elements.FunctionObject;
+import elements.ParseType;
 
 public class ParsingEngine {
 
@@ -39,10 +41,33 @@ public class ParsingEngine {
 			}
 			
 		}
+		bufferConvertedFile.close();
 		
 		
 	}
 	
+	public void findandInsertFunction (File file, ParseType type) throws FileNotFoundException{
+		String line;
+		String[] tempLine;
+	
+		Scanner sc = new Scanner(file);
+		while(sc.hasNextLine()){
+		    line = sc.nextLine(); 
+		    tempLine = line.split(" ");
+		    
+			for(int index=0; index<tempLine.length; index++){
+				
+				if(tempLine[index].toLowerCase().contains(type.FUNCTION.toString().toLowerCase())){
+					
+					obj.put(tempLine[index+1], new FunctionObject());  
+				}
+				
+			}
+		}
+		sc.close();
+		
+		
+	}
 	public HashMap<String,FunctionObject> getFunctionList(){
 		
 		return obj;
