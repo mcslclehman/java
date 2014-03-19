@@ -1,10 +1,12 @@
 package engine;
 
-import java.awt.Color;
+
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-abstract class GameCharacterEntity{
+abstract class GameCharacterEntity implements KeyListener{
 	
 	BufferedImage[] spriteSheet;
 	BufferedImage[][] spriteSheetAction;
@@ -54,18 +56,36 @@ abstract class GameCharacterEntity{
 		}
 		else if(actionSpriteSheet && !wholeSpriteSheet){
 			
-/*			   for(int i = 0; i < rows; i++) {
+		   for(int i = 0; i < rows; i++) {
 				      for(int j = 0; j < spriteSheetAction[i].length; j++) {
 		                  g.drawImage(spriteSheetAction[i][j], 100+(j*100), 100+(i*100),null);
 		               	 
 			          }
-			   } */
+			   } 
 			
 		}
 		
 		
 		
 		
+		
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
 		
 	}
 
