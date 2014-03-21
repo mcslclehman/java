@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 public class GameUtility {
 	
 	
+
+	
 	public static BufferedImage loadImageFromDirectoryFile(String fileName){
 		
 		String path = System.getProperty("user.dir");
@@ -59,6 +61,10 @@ public class GameUtility {
 		}
 		   
 		   return sprites;
+	}
+	
+	public static BufferedImage spiritActionLoader(BufferedImage spiritSheet, int x_Pos, int y_Pos, int width, int height){
+		return spiritSheet.getSubimage(x_Pos, y_Pos, width, height);	 
 	}
 		
 	

@@ -13,7 +13,9 @@ import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import engine.GameCharacter;
+import spiritUtility.Spirit;
+import spiritUtility.SpiritActionType;
+
 
 public class CharacterTest extends Applet implements MouseMotionListener, Runnable, KeyListener {
 
@@ -22,13 +24,16 @@ public class CharacterTest extends Applet implements MouseMotionListener, Runnab
 	private int mX, mY;
 	private int gameTime =0;
 
-	private int pos =0;
-	private int actionAnimation =0;
+	private int posOne =0;
+	private int posTwo =0;
+	private SpiritActionType actionAnimation = null;
   private Image dbImage;
   private Graphics dbg;
   private    Thread t;
   
-  private  GameCharacter character;
+    private  Spirit character;
+    private  Spirit characterTwo;
+
 
   
  
@@ -42,14 +47,49 @@ public class CharacterTest extends Applet implements MouseMotionListener, Runnab
 	  
 	  this.setName("Ryu will take all...");
 	  this.setSize(700, 700);
-      character = new GameCharacter();
+	  
+	  SpiritActionType defaultAction = SpiritActionType.IDLE;	  
+	  this.actionAnimation = defaultAction; 
+	  
+      character = new Spirit("/Ryu.gif");
+      
+      
+      int[] x_Pos  = {0,(65),(2*65),(3*65)};
+      int[] y_Pos  = {0, 0, 0, 0};
+      int[] width  = {65, 65, 65, 65};
+      int[] height = {100,100,100,100};
+      
+      character.buildSpiritAction(SpiritActionType.IDLE, 4, x_Pos, y_Pos, width, height);
+      
+      int[] x__Pos  = {0,(65),(2*65)};
+      int[] y__Pos  = {(2*100), (2*100), (2*100)};
+      int[] width_  = {63, 65, 65};
+      int[] height_ = {100,100,100};
+      
+      character.buildSpiritAction(SpiritActionType.LEFT_PUNCH, 3, x__Pos, y__Pos, width_, height_);
+      int[] x___Pos  = {0,(65),(2*65), (3*65)};
+      int[] y___Pos  = {(3*100), (3*100), (3*100), (3*100)};
+      int[] width__  = {65, 65, 65, 65};
+      int[] height__ = {100,100,100, 100};
+      
+      character.buildSpiritAction(SpiritActionType.LEFT_KICK, 4, x___Pos, y___Pos, width__, height__);
+      
+      characterTwo = new Spirit("/Ryu4.gif");
+      
+      
+//      x_Pos  = {0,(65),(2*65),(3*65)};
+//      y_Pos  = {0, 0, 0, 0};
+//      width  = {65, 65, 65, 65};
+//      height = {100,100,100,100};
+//      
+      characterTwo.buildSpiritAction(SpiritActionType.IDLE, 4, x_Pos, y_Pos, width, height);
             
-      int[] width   = {65,65,60,68,67,70,60};
-      int[] height  = {100,100,100,100,100,100,100};
+/*      width   = {65,65,60,68,67,70,60};
+      height  = {100,100,100,100,100,100,100};
       int row       = 7;
       int[] columns = {5,5,3,4,5,5,3};
       
-      character.buildCharacterSprite("/Ryu.gif", width, height,row, columns);
+      character.buildCharacterSprite("/Ryu.gif", width, height,row, columns);*/
       
       addMouseMotionListener(this);
       addKeyListener(this);
@@ -63,15 +103,20 @@ public class CharacterTest extends Applet implements MouseMotionListener, Runnab
   
   public void run(){
 	  
-	  int i=0;
+	  int i=0, j=0;
 	
 	  while(true){
 		
-		  pos = i;
-		  if(i<4){i++;}
+		  
+
+		  posOne = i;
+		  posTwo = j;
+		  if(character.hasActionType(actionAnimation) && i<character.getAnimationLenght(actionAnimation)){i++;}
 		  else{i=0;}
 		  
-		  actionAnimation = character.getAnimationIndex();
+		  if(characterTwo.hasActionType(actionAnimation) && j<characterTwo.getAnimationLenght(actionAnimation)){j++;}
+		  else{j=0;}
+		  
 
 		  
 		  this.repaint();
@@ -102,11 +147,9 @@ public class CharacterTest extends Applet implements MouseMotionListener, Runnab
 
 
   public void paint(Graphics g) {
-    
-     
-
-
-	  character.animation(g,actionAnimation,pos);
+	  
+	  if(character.hasActionType(actionAnimation)){ character.animation(g, actionAnimation, posOne, 100, 100);}
+	  if(characterTwo.hasActionType(actionAnimation)){ characterTwo.animation(g, actionAnimation, posTwo, 500, 500);}
 	  g.drawString("Game Time :"+gameTime, 100, 500);
     
   }
@@ -125,13 +168,15 @@ public class CharacterTest extends Applet implements MouseMotionListener, Runnab
 @Override
 public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
-	if(e.getKeyCode() == KeyEvent.VK_SPACE){
-		
-		if(actionAnimation<4){character.increaseAnimationIndex();}
-		else{character.setAnimationIndex(0);}
-		System.out.println("count "+actionAnimation);
+	if(e.getKeyCode() == KeyEvent.VK_SPACE){	
+		actionAnimation =SpiritActionType.IDLE;
 	}
-	System.out.println("key: "+e.getKeyCode());
+	else if(e.getKeyCode() == KeyEvent.VK_CONTROL){		
+		actionAnimation =SpiritActionType.LEFT_PUNCH;
+	}
+	else if(e.getKeyCode() == KeyEvent.VK_UP){		
+		actionAnimation =SpiritActionType.LEFT_KICK;
+	}
 }
 
 @Override
